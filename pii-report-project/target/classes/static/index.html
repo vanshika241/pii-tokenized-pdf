@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PII Tokenizer</title>
+  <style>
+    :root {
+      --cream: #f8f3e6;
+      --cream-dark: #efe7d2;
+      --card: #fffdf7;
+      --ink: #111111;
+      --muted: #555048;
+      --line: #d9cfb6;
+      --error: #a12a1f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.5;
+    }
+    main { max-width: 640px; margin: 0 auto; padding: 56px 16px; }
+    h1 { font-size: 2.2rem; margin: 0 0 6px; letter-spacing: -0.5px; }
+    h2 { font-size: 1.2rem; margin: 0 0 12px; }
+    p.sub { margin: 0 0 32px; color: var(--muted); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .drop {
+      display: block;
+      border: 2px dashed var(--line);
+      border-radius: 10px;
+      padding: 36px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .drop:hover, .drop.over { background: var(--cream-dark); border-color: var(--ink); }
+    .drop strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .drop span { color: var(--muted); font-size: .95rem; }
+    .filename { margin-top: 14px; font-weight: bold; word-break: break-all; }
+
+    button, .btn {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 18px;
+    }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+    .btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); margin-left: 8px; }
+
+    .error { color: var(--error); margin-top: 14px; }
+    .hidden { display: none; }
+
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .stat { flex: 1 1 120px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+    .stat b { display: block; font-size: 1.6rem; }
+    .stat small { color: var(--muted); }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 8px 4px; border-bottom: 1px solid var(--line); }
+    th { font-size: .85rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    td.num { text-align: right; }
+    .none { color: var(--muted); }
+    footer { color: var(--muted); font-size: .85rem; margin-top: 32px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>PII Tokenizer</h1>
+  <p class="sub">Upload a PDF. Personal data is replaced with tokens and you get a clean PDF to download.</p>
+
+  <section class="card">
+    <h2>1. Upload your PDF</h2>
+    <label class="drop" id="drop">
+      <strong>Click to choose a PDF</strong>
+      <span>or drag and drop it here (max 25 MB)</span>
+      <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+    </label>
+    <div class="filename hidden" id="filename"></div>
+    <button id="go" disabled>Tokenize PDF</button>
+    <div class="error hidden" id="error"></div>
+  </section>
+
+  <section class="card hidden" id="result">
+    <h2>2. Your tokenized file is ready</h2>
+    <div class="stats">
+      <div class="stat"><b id="sTotal">0</b><small>values replaced</small></div>
+      <div class="stat"><b id="sUnique">0</b><small>unique values</small></div>
+      <div class="stat"><b id="sPages">0</b><small>pages</small></div>
+    </div>
+    <table>
+      <thead><tr><th>PII type</th><th style="text-align:right">Found</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <a class="btn" id="download" href="#">Download tokenized PDF</a>
+    <button class="btn secondary" id="again" type="button">Tokenize another</button>
+  </section>
+
+  <footer>Detects names, cities/states, addresses, PIN codes, dates of birth, email, phone, Aadhaar, PAN, card numbers and IFSC codes. The same value gets the same token, e.g. [EMAIL_1].</footer>
+</main>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const fileInput = $('file'), drop = $('drop'), go = $('go');
+  let chosen = null;
+
+  function pick(file) {
+    $('error').classList.add('hidden');
+    if (!file) return;
+    if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+      showError('Please choose a PDF file.');
+      return;
+    }
+    chosen = file;
+    $('filename').textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+    $('filename').classList.remove('hidden');
+    go.disabled = false;
+  }
+
+  function showError(msg) {
+    $('error').textContent = msg;
+    $('error').classList.remove('hidden');
+  }
+
+  fileInput.addEventListener('change', () => pick(fileInput.files[0]));
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => pick(e.dataTransfer.files[0]));
+
+  go.addEventListener('click', async () => {
+    if (!chosen) return;
+    go.disabled = true;
+    go.textContent = 'Tokenizing…';
+    $('error').classList.add('hidden');
+    try {
+      const fd = new FormData();
+      fd.append('file', chosen);
+      const res = await fetch('/api/tokenize', { method: 'POST', body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Something went wrong (' + res.status + ')');
+      render(data);
+    } catch (e) {
+      showError(e.message);
+    } finally {
+      go.disabled = false;
+      go.textContent = 'Tokenize PDF';
+    }
+  });
+
+  function render(d) {
+    $('sTotal').textContent = d.totalReplaced;
+    $('sUnique').textContent = d.uniqueValues;
+    $('sPages').textContent = d.pages;
+    const rows = $('rows');
+    rows.innerHTML = '';
+    const entries = Object.entries(d.countsByType || {});
+    if (!entries.length) {
+      rows.innerHTML = '<tr><td colspan="2" class="none">No PII found in this document.</td></tr>';
+    }
+    for (const [type, n] of entries) {
+      const tr = document.createElement('tr');
+      const a = document.createElement('td'); a.textContent = type;
+      const b = document.createElement('td'); b.textContent = n; b.className = 'num';
+      tr.append(a, b);
+      rows.append(tr);
+    }
+    $('download').href = d.downloadUrl;
+    $('download').setAttribute('download', d.downloadName);
+    $('result').classList.remove('hidden');
+    $('result').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  $('again').addEventListener('click', () => {
+    chosen = null;
+    fileInput.value = '';
+    $('filename').classList.add('hidden');
+    $('result').classList.add('hidden');
+    go.disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

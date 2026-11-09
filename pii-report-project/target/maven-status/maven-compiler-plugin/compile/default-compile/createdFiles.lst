@@ -1,0 +1,6 @@
+org/project/piireportproject/model/TokenizationResult.class
+org/project/piireportproject/service/PdfTokenizationService.class
+org/project/piireportproject/PiiReportProjectApplication.class
+org/project/piireportproject/controller/TokenizeController.class
+org/project/piireportproject/service/PiiDetector$Rule.class
+org/project/piireportproject/service/FileStorageService$StoredFile.class

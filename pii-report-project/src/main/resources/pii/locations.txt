@@ -1,0 +1,175 @@
+# Indian states, union territories and cities. One per line, case-insensitive.
+# Add more places here; ambiguous English words are deliberately left out.
+Andhra Pradesh
+Arunachal Pradesh
+Assam
+Bihar
+Chhattisgarh
+Goa
+Gujarat
+Haryana
+Himachal Pradesh
+Jharkhand
+Karnataka
+Kerala
+Madhya Pradesh
+Maharashtra
+Manipur
+Meghalaya
+Mizoram
+Nagaland
+Odisha
+Orissa
+Punjab
+Rajasthan
+Sikkim
+Tamil Nadu
+Telangana
+Tripura
+Uttar Pradesh
+Uttarakhand
+West Bengal
+Andaman and Nicobar
+Chandigarh
+Dadra and Nagar Haveli
+Daman and Diu
+Jammu and Kashmir
+Jammu
+Kashmir
+Ladakh
+Lakshadweep
+Puducherry
+Pondicherry
+Delhi
+New Delhi
+NCR
+Mumbai
+Bombay
+Navi Mumbai
+Thane
+Pune
+Nagpur
+Nashik
+Aurangabad
+Kolhapur
+Solapur
+Bengaluru
+Bangalore
+Mysuru
+Mysore
+Mangaluru
+Mangalore
+Hubli
+Belagavi
+Chennai
+Madras
+Coimbatore
+Madurai
+Tiruchirappalli
+Trichy
+Vellore
+Hyderabad
+Secunderabad
+Warangal
+Visakhapatnam
+Vizag
+Vijayawada
+Guntur
+Tirupati
+Kolkata
+Calcutta
+Howrah
+Durgapur
+Siliguri
+Ahmedabad
+Surat
+Vadodara
+Baroda
+Rajkot
+Gandhinagar
+Jaipur
+Jodhpur
+Udaipur
+Kota
+Ajmer
+Bikaner
+Lucknow
+Kanpur
+Noida
+Greater Noida
+Ghaziabad
+Agra
+Varanasi
+Prayagraj
+Allahabad
+Meerut
+Aligarh
+Bareilly
+Gorakhpur
+Mathura
+Gurugram
+Gurgaon
+Faridabad
+Panipat
+Ambala
+Rohtak
+Hisar
+Sonipat
+Karnal
+Chandigarh
+Mohali
+Ludhiana
+Amritsar
+Jalandhar
+Patiala
+Bathinda
+Dehradun
+Haridwar
+Rishikesh
+Nainital
+Shimla
+Manali
+Dharamshala
+Srinagar
+Bhopal
+Indore
+Gwalior
+Jabalpur
+Ujjain
+Raipur
+Bhilai
+Bilaspur
+Patna
+Gaya
+Muzaffarpur
+Bhagalpur
+Ranchi
+Jamshedpur
+Dhanbad
+Bokaro
+Bhubaneswar
+Cuttack
+Rourkela
+Puri
+Guwahati
+Dibrugarh
+Silchar
+Shillong
+Imphal
+Aizawl
+Kohima
+Agartala
+Gangtok
+Itanagar
+Panaji
+Thiruvananthapuram
+Trivandrum
+Kochi
+Cochin
+Ernakulam
+Kozhikode
+Calicut
+Thrissur
+Kannur
+Kollam
+Port Blair
